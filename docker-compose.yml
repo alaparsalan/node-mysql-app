@@ -1,0 +1,33 @@
+version: "3.2"
+services:
+  nodejs:
+    build: 
+      context: .
+    image: nodejs-mysql-app2
+    networks:
+      - frontend
+      - backend
+    environment:
+      - MYSQL_HOST=mysql-app2
+      - MYSQL_USER=moeuser
+      - MYSQL_PASS=moepass
+      - MYSQL_DB=moe_db
+    volumes:
+      - ./www/:/var/www/html/
+    ports:
+      - "30002:8005"
+    container_name: nodejs-app2
+  mysql:
+    image: mysql:5.7
+    networks:
+      - backend
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=moeuser
+      - MYSQL_PASSWORD=moepass
+      - MYSQL_DATABASE=moe_db
+    container_name: mysql-app2
+  
+networks:
+  frontend:
+  backend:
