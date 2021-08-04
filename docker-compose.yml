@@ -1,33 +1,47 @@
-version: "3.2"
+version: '3.3'
 services:
-  nodejs:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'lrnipdb'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3307:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3307'
+    networks:
+      - backend
+      # Where our data will be persisted
+    volumes:
+      - my-db:/var/lib/mysql
+# Names our volume
+  backend-node:
     build: 
       context: .
-    image: nodejs-mysql-app2
+    image: backend-app
     networks:
-      - frontend
       - backend
-    environment:
-      - MYSQL_HOST=mysql-app2
-      - MYSQL_USER=moeuser
-      - MYSQL_PASS=moepass
-      - MYSQL_DB=moe_db
-    volumes:
-      - ./www/:/var/www/html/
+    env_file: .env
+    # environment:
+    #   - MYSQL_HOST=mysql-app2
+    #   - MYSQL_USER=moeuser
+    #   - MYSQL_PASS=moepass
+    #   - MYSQL_DB=moe_db
+    # volumes:
+    #   - ./www/:/usr/src/app2/uploads
     ports:
-      - "30002:8005"
-    container_name: nodejs-app2
-  mysql:
-    image: mysql:5.7
-    networks:
-      - backend
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=moeuser
-      - MYSQL_PASSWORD=moepass
-      - MYSQL_DATABASE=moe_db
-    container_name: mysql-app2
-  
+      - "3001:3001"
+    container_name: backend-app
+volumes:
+  my-db:
+
 networks:
-  frontend:
   backend:

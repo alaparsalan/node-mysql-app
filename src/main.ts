@@ -1,10 +1,11 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  const configService = app.get(ConfigService);
   const options = new DocumentBuilder()
     .setTitle('learnip Crud')
     .setDescription('The learn-Ip API description')
@@ -13,6 +14,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api/docs', app, document);
-  await app.listen(3000);
+  await app.listen(configService.get('PORT'));
 }
 bootstrap();

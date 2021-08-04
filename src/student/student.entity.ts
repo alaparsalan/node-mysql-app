@@ -24,6 +24,9 @@ export class StudentEntity {
   @Column()
   gender: string
 
+  @ApiProperty()
+  @Column()
+  extraColumn1: string
 
   @Column({
     type: 'boolean',

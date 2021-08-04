@@ -10,9 +10,10 @@ import GenreModule from './genre/genre.module';
 import UserEntity from './db/user.entity';
 import BookEntity from './db/book.entity';
 import GenreEntity from './db/genre.entity';
-
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    ConfigModule.forRoot(),   
     // UserModule ,
     BooksModule,
     // GenreModule,
